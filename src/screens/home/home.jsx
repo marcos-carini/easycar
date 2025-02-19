@@ -10,7 +10,7 @@ import { styles } from "./home.style.js";
 
 function Home() {
   function OpenPassenger() {
-    Alert.alert("Abrir tela 1");
+    Alert.alert("Abrir tela 5");
   }
 
   function OpenRide() {
