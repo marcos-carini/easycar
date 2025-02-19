@@ -42,7 +42,7 @@ function Passenger(props) {
           <TextInput style={styles.input} />
         </View>
       </View>
-      <MyButton text="CONFIRMAR" />
+      <MyButton text="CONFIRMAR" theme="red" />
     </View>
   );
 }
