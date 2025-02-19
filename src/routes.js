@@ -32,10 +32,9 @@ function Routes() {
           name="ride"
           component={Ride}
           options={{
-            headerShadowVisible: false,
-            headerTitle: "",
-            headerTransparent: true,
+            headerTitle: "Viagens Disponíveis",
             headerBackButtonDisplayMode: "minimal",
+            headerTitleAlign: "center",
           }}
         />
       </Stack.Navigator>
