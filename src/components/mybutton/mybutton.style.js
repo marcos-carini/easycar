@@ -4,6 +4,7 @@ export const styles = {
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#F7D600",
+    padding: 20,
   },
   textDark: {
     color: "#000000",
