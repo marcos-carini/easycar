@@ -8,13 +8,13 @@ import {
 import icons from "../../constants/icons.js";
 import { styles } from "./home.style.js";
 
-function Home() {
+function Home(props) {
   function OpenPassenger() {
-    Alert.alert("Abrir tela 5");
+    props.navigation.navigate("passenger");
   }
 
   function OpenRide() {
-    Alert.alert("Abrir tela 2");
+    props.navigation.navigate("ride");
   }
 
   return (
