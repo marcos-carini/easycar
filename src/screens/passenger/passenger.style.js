@@ -29,4 +29,9 @@ export const styles = {
     marginTop: 5,
     borderRadius: 5,
   },
+  loading: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 };
