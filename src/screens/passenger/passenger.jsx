@@ -32,7 +32,7 @@ function Passenger(props) {
   const [driverName, setDriverName] = useState("");
 
   async function RequestRideFromUser() {
-    //const response = {};
+    // const response = {};
     // const response = {
     //   ride_id: 1,
     //   passenger_user_id: 1,

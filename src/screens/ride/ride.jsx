@@ -2,17 +2,28 @@ import { FlatList, View, Text, TouchableOpacity, Image } from "react-native";
 import { styles } from "./ride.style.js";
 import { json_rides } from "../../constants/dados.js";
 import icons from "../../constants/icons.js";
+import { useEffect, useState } from "react";
 
 function Ride(props) {
+  const userId = 2;
+  const [rides, setRides] = useState([]);
+
   function ClickRide(id) {
-    console.log("Ride=" + id);
-    props.navigation.navigate("ride-detail");
+    props.navigation.navigate("ride-detail", { rideId: id, userId: userId });
   }
+
+  async function RequestRides() {
+    setRides(json_rides);
+  }
+
+  useEffect(() => {
+    RequestRides();
+  }, []);
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={json_rides}
+        data={rides}
         keyExtractor={(ride) => ride.ride_id}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => {
