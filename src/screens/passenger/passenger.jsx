@@ -19,7 +19,7 @@ import {
   requestForegroundPermissionsAsync,
   reverseGeocodeAsync,
 } from "expo-location";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { api, HandleError } from "../../constants/api.js";
 
 function Passenger(props) {
   const userId = 1;
@@ -32,39 +32,26 @@ function Passenger(props) {
   const [driverName, setDriverName] = useState("");
 
   async function RequestRideFromUser() {
-    // const response = {};
-    // const response = {
-    //   ride_id: 1,
-    //   passenger_user_id: 1,
-    //   passenger_name: "Heber Stein Mazutti",
-    //   passenger_phone: "(11) 99999-9999",
-    //   pickup_address: "Av. Paulista, 1500 - Jardim Paulista",
-    //   pickup_date: "2025-02-16",
-    //   pickup_latitude: "-23.561747",
-    //   pickup_longitude: "-46.656244",
-    //   dropoff_address: "Shopping Morumbi",
-    //   status: "P",
-    //   driver_user_id: null,
-    //   driver_name: null,
-    //   driver_phone: null,
-    // };
+    try {
+      const response = await api.get("/rides", {
+        params: {
+          passenger_user_id: userId,
+          pickup_date: new Date()
+            .toISOString("pt-BR", { timeZone: "America/Sao_Paulo" })
+            .substring(0, 10),
+          status_not: "F",
+        },
+      });
 
-    const response = {
-      ride_id: 1,
-      passenger_user_id: 1,
-      passenger_name: "Heber Stein Mazutti",
-      passenger_phone: "(11) 99999-9999",
-      pickup_address: "Av. Paulista, 1500 - Jardim Paulista",
-      pickup_date: "2025-02-16",
-      pickup_latitude: "-23.561747",
-      pickup_longitude: "-46.656244",
-      dropoff_address: "Shopping Morumbi",
-      status: "A",
-      driver_user_id: 2,
-      driver_name: "João Martins",
-      driver_phone: "(11) 5555-5555",
-    };
-    return response;
+      if (response.data[0]) {
+        return response.data[0];
+      } else {
+        return {};
+      }
+    } catch (error) {
+      HandleError(error);
+      props.navigation.goBack();
+    }
   }
 
   async function RequestPermissionAndGetLocation() {
@@ -137,36 +124,51 @@ function Passenger(props) {
   }
 
   async function AskForRide() {
-    const json = {
-      passenger_id: userId,
-      pickup_adress: pickupAddress,
-      dropoff_adress: dropoffAddress,
-      pickup_latitude: myLocation.latitude,
-      pickup_longitude: myLocation.longitude,
-    };
+    try {
+      const json = {
+        passenger_user_id: userId,
+        pickup_address: pickupAddress,
+        dropoff_address: dropoffAddress,
+        pickup_latitude: myLocation.latitude,
+        pickup_longitude: myLocation.longitude,
+      };
 
-    console.log("Fazer POST para o servidor: ", json);
-    props.navigation.goBack();
+      const response = await api.post("/rides", json);
+
+      if (response.data) {
+        props.navigation.goBack();
+      }
+    } catch (error) {
+      HandleError(error);
+    }
   }
 
   async function CancelRide() {
-    const json = {
-      passenger_user_id: userId,
-      ride_id: rideId,
-    };
+    try {
+      const response = await api.delete("/rides/" + rideId);
 
-    console.log("Cancelar carona: ", json);
-    props.navigation.goBack();
+      if (response.data) {
+        props.navigation.goBack();
+      }
+    } catch (error) {
+      HandleError(error);
+    }
   }
 
   async function FinishRide() {
     const json = {
       passenger_user_id: userId,
-      ride_id: rideId,
     };
 
-    console.log("Finalizar carona: ", json);
-    props.navigation.goBack();
+    try {
+      const response = await api.put("/rides/" + rideId + "/finish", json);
+
+      if (response.data) {
+        props.navigation.goBack();
+      }
+    } catch (error) {
+      HandleError(error);
+    }
   }
 
   useEffect(() => {
