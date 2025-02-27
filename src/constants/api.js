@@ -7,10 +7,8 @@ const api = axios.create({
 });
 
 function HandleError(error) {
-  console.log("Erro na API: ", error);
+  console.log(error);
   if (error.response?.data.error) {
-    console.log("Response Data:", error.response.data);
-    console.log("Status Code:", error.response.status);
     Alert.alert(error.response.data.error);
   } else {
     Alert.alert("Ocorreu um erro. Tente novamente mais tarde");

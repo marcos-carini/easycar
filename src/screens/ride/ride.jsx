@@ -1,8 +1,9 @@
 import { FlatList, View, Text, TouchableOpacity, Image } from "react-native";
 import { styles } from "./ride.style.js";
 import icons from "../../constants/icons.js";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { api, HandleError } from "../../constants/api.js";
+import { useFocusEffect } from "@react-navigation/native";
 
 function Ride(props) {
   const userId = 2;
@@ -17,7 +18,7 @@ function Ride(props) {
       const response = await api.get("/rides/drivers/" + userId);
 
       if (response.data) {
-        console.log(response.data);
+        console.log("Resposta: ", response.data);
         setRides(response.data);
       }
     } catch (error) {
@@ -25,9 +26,11 @@ function Ride(props) {
     }
   }
 
-  useEffect(() => {
-    RequestRides();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      RequestRides();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -42,8 +45,12 @@ function Ride(props) {
               onPress={() => ClickRide(item.ride_id)}
             >
               <View style={styles.containerName}>
-                {item.driver_user_id == userId && (
+                {item.driver_user_id == userId && item.status != "F" && (
                   <Image source={icons.car} style={styles.car} />
+                )}
+
+                {item.driver_user_id == userId && item.status == "F" && (
+                  <Image source={icons.check} style={styles.check} />
                 )}
 
                 <Text style={styles.name}>{item.passenger_name}</Text>

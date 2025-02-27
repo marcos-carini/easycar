@@ -16,6 +16,11 @@ export const styles = {
     height: 20,
     margin: 3,
   },
+  check: {
+    width: 20,
+    height: 20,
+    margin: 3,
+  },
   containerName: {
     flexDirection: "row",
     alignItems: "center",

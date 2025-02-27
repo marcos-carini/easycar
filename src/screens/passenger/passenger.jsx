@@ -33,12 +33,16 @@ function Passenger(props) {
 
   async function RequestRideFromUser() {
     try {
+      const today = new Date()
+        .toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo" }) // Retorna '26/02/2025'
+        .split("/")
+        .reverse()
+        .join("-");
+
       const response = await api.get("/rides", {
         params: {
           passenger_user_id: userId,
-          pickup_date: new Date()
-            .toISOString("pt-BR", { timeZone: "America/Sao_Paulo" })
-            .substring(0, 10),
+          pickup_date: today,
           status_not: "F",
         },
       });
@@ -74,8 +78,6 @@ function Passenger(props) {
       longitude: long,
     });
 
-    console.log(response);
-
     if (
       response[0].street &&
       response[0].streetNumber &&
@@ -93,6 +95,7 @@ function Passenger(props) {
 
   async function LoadScreen() {
     const response = await RequestRideFromUser();
+    console.log(response);
 
     if (!response.ride_id) {
       const location = { latitude: -23.561747, longitude: -46.656244 };
